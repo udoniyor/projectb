@@ -88,8 +88,5 @@ def main(argv):
         print("Launching the Graphical User Interface of ProjectB")
         projectbgui(paramfile,outputdir)
 
-
-
-
 if __name__ == "__main__":
    main(sys.argv[1:])
