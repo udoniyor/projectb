@@ -24,7 +24,7 @@ from pybo.bayesopt import solvers
 from pybo.bayesopt import policies
 from pybo.bayesopt import recommenders
 
-import objwrapper
+import projectb.objwrapper
 from multiprocessing import Process, Pipe
 import threading
 

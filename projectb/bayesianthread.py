@@ -5,6 +5,7 @@ from __future__ import print_function
 from numpy.lib.recfunctions import append_fields
 from mwhutils.random import rstate
 
+import projectb.objwrapper
 import pygp
 import numpy as np
 from sets import Set
@@ -24,7 +25,7 @@ from pybo.bayesopt import solvers
 from pybo.bayesopt import policies
 from pybo.bayesopt import recommenders
 
-import objwrapper
+
 import time
 
 class BayesianOptProcess():
