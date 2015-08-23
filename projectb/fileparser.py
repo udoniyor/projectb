@@ -10,8 +10,8 @@ import os
 def parsein(file, params, console=None):
     def add_data(d):
         try:
-            y = float[d[0]]
-            x = float(d[3:])
+            y = float[d[1]]
+            x = float(d[4:])
             param["data"][0].append(x)
             param["data"][1].append(y)
         except:

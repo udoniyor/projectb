@@ -67,7 +67,4 @@ File Format Specification
 To Do
 ============
  - Finalize Tutorial 
- - Update CLI module
- - Add comments
  - Unit tests
- - Update data file parser

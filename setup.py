@@ -5,7 +5,7 @@ Setup script for ProjectB.
 from setuptools import setup, find_packages
 
 setup(name='projectb',
-      version='0.0.2',
+      version='0.0.3',
       author='Doniyor Ulmasov',
       author_email='du514@ic.ac.uk',
       description='A Python package for GUI Bayesian optimization',
