@@ -1,5 +1,5 @@
 """
-Setup script for BrojectB.
+Setup script for ProjectB.
 """
 
 from setuptools import setup, find_packages
@@ -13,4 +13,4 @@ setup(name='projectb',
       license='Simplified BSD',
       packages=find_packages(),
       package_data={'': ['*.txt', '*.npz']},
-      install_requires=['numpy', 'scipy', 'matplotlib', 'mwhutils', 'pygp'])
+      install_requires=['numpy', 'scipy', 'matplotlib', 'mwhutils', 'pygp', 'pybo'])
