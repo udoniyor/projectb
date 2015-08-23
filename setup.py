@@ -13,4 +13,4 @@ setup(name='projectb',
       license='Simplified BSD',
       packages=find_packages(),
       package_data={'': ['*.txt', '*.npz']},
-      install_requires=['numpy', 'scipy', 'matplotlib', 'mwhutils', 'pygp', 'pybo'])
+      install_requires=['numpy', 'scipy', 'matplotlib', 'mwhutils', 'pygp'])
