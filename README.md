@@ -1,7 +1,8 @@
 # ProjectB
 
-
-![ProjectB Logo](https://github.com/udoniyor/projectb/raw/master/logo.png)
+<p align="center">
+  <img src="https://github.com/udoniyor/projectb/raw/master/logo.png" alt="ProjectB Logo"/>
+</p>
 
 
 ProjectB is a graphical user interface, which allows untrained users to optimize any model that can be
