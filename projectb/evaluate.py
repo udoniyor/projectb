@@ -16,8 +16,10 @@ import decimal
 # matplotlib.use('TkAgg')
 import sys
 
+#The Evaluation stage panel
 class evaluation():
 
+    #Creates all the frames and inserts the widgets
     def __init__(self, params, experiments,connector,master,console):
         self.frame = Frame(master)
         self.frame.config(padx=20,pady=20,bg=Styles.colours["grey"])
@@ -31,7 +33,7 @@ class evaluation():
         self.console = console
         self.master = master
 
-
+    #The content widget
     def evaluationUI(self):
         modeldetails = header(self.frame,"Model")
         fm = Frame(self.frame)
@@ -98,14 +100,17 @@ class evaluation():
         #Footer
         self.footer.grid(row=3,column=0,sticky=W+E+N+S,columnspan=2)
 
+    #Close the connector and then the main window
     def closeall(self):
         self.connector.closestage()
         self.master.destroy()
 
+    #Query the bayes opt process for the posterior data
     def query(self,id):
         f =tkFileDialog.askopenfilename(parent=self.master, title='Choose query file')
         self.connector.queryposterior(f,id)
 
+    #Save the data from the Console
     def saveconsole(self):
         f = tkFileDialog.asksaveasfilename(parent=self.master,initialfile="log.txt", title='Choose where to save log file')
         try:
@@ -117,7 +122,7 @@ class evaluation():
         except:
             self.console.log("Something went wrong with exporting logs, try a different location")
 
-
+    #Open the output directory
     def opendir(self):
         import platform
         import os

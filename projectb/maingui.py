@@ -1,23 +1,32 @@
-__author__ = 'Doniyor'
+try:
+    from Tkinter import Tk, FALSE, Frame, BOTH, END, DISABLED, Message, LEFT, RIGHT, NORMAL, CENTER, Text, Scrollbar, \
+        FLAT, N, S, E, W
+except:
+    from tkinter import Tk, FALSE, Frame, BOTH, END, DISABLED, Message, LEFT, RIGHT, NORMAL, CENTER, Text, Scrollbar, \
+        FLAT, N, S, E, W
 
-from Tkinter import Tk, FALSE, Frame, BOTH, END, DISABLED, Message, LEFT, RIGHT, NORMAL, CENTER, Text, Scrollbar, FLAT, N, S, E, W
-from selection import ModelFrame,ModelBayes
-from styles import Styles
-from factories import yellowbutton,deactivatebutton,activateyellowbutton,customvar,redbutton
-from observation import observation
-from evaluate import evaluation
-from fileparser import parsemodifycustomvar,parsein,parseintosimple
-import bayesianthread
 from multiprocessing import Process, Pipe
 import threading
+
+from selection import ModelFrame, ModelBayes
+from styles import Styles
+from factories import yellowbutton, deactivatebutton, activateyellowbutton, customvar, redbutton
+from observation import observation
+from evaluate import evaluation
+from fileparser import parsemodifycustomvar, parsein, parseintosimple
+import bayesianthread
 from header import mainheader
 from consoles import console
 
+
+# Main GUI window class
 class projectbgui:
-    def __init__(self,paramin = None, paramout = None):
+    def __init__(self, paramin=None, paramout=None):
         self.master = Tk()
+        self.master.title("ProjectB")
         self.master.resizable(width=FALSE, height=FALSE)
         self.console = console()
+        # Set up intial parameters
         self.params = {
             "command": customvar(" i.e. python C://Users/Desktop/model/final4.py", "Model Command", self.console),
             "modelinput": customvar("Select Input File", "Model Input File", self.console),
@@ -43,7 +52,7 @@ class projectbgui:
             "gpell": customvar("bounds[:, 1] - bounds[:, 0]", "GP ell", self.console),
             "gpsn": customvar("6", "GP sn", self.console),
             "priorsnscale": customvar("0.1", "Horseshoe Prior sn scale", self.console),
-            "priorsnmin":customvar("sn", "Horseshoe Prior sn min", self.console),
+            "priorsnmin": customvar("sn", "Horseshoe Prior sn min", self.console),
             "priorsfmu": customvar("np.log(sf)", "Log Normal Prior sf mu", self.console),
             "priorsfsigma": customvar("1.", "Log Normal Prior sf sigma", self.console),
             "priorsfmin": customvar("1e-6", "Log Normal Prior sf min", self.console),
@@ -55,79 +64,86 @@ class projectbgui:
             "mcmcn": customvar(10, "MCMC number of models", self.console),
             "eixi": customvar(0.0, "EI policy ei", self.console),
             "pixi": customvar(0.05, "PI policy xi", self.console),
-            "ucbdelta":customvar(0.1, "UCB policy delta", self.console),
-            "ucbxi":customvar(0.2, "UCB policy xi", self.console),
+            "ucbdelta": customvar(0.1, "UCB policy delta", self.console),
+            "ucbxi": customvar(0.2, "UCB policy xi", self.console),
             "thompsonn": customvar(100, "Thompson policy Iterations", self.console),
             "thompsonrng": customvar(0, "Thompson policy RNG", self.console)
         }
 
-        self.isready = {"model": False,"bayes":True}
-        self.headerframe = mainheader(self.master,self.console,self.params)
+        self.isready = {"model": False, "bayes": True}
+        self.headerframe = mainheader(self.master, self.console, self.params)
         self.currentstage = self.selectionstage()
         self.footerframe = self.concolefooter()
 
+        # Process if intial parameters were given
         if paramin is not None:
-            parsemodifycustomvar(self.params,parsein(paramin,parseintosimple(self.params),self.console))
+            parsemodifycustomvar(self.params, parsein(paramin, parseintosimple(self.params), self.console))
             self.ready("model")
         self.master.mainloop()
 
-
+    # Create the Selection stage panels
     def selectionstage(self):
         contentframe = Frame(self.master)
-        ModelFrame(contentframe,self.console,self.params,0,0,self)
-        ModelBayes(contentframe,self.console,self.params,0,1,self)
-        contentframe.grid(row=1,column=0)
+        ModelFrame(contentframe, self.console, self.params, 0, 0, self)
+        ModelBayes(contentframe, self.console, self.params, 0, 1, self)
+        contentframe.grid(row=1, column=0)
         return contentframe
 
+    # Create the console footer widgets
     def concolefooter(self):
         footerframe = Frame(self.master)
-        footerframe.config(padx=5,pady=5,bg=Styles.colours["darkGrey"])
+        footerframe.config(padx=5, pady=5, bg=Styles.colours["darkGrey"])
         title = Message(footerframe, text="Console:",
-                         justify=CENTER,bg=Styles.colours["darkGrey"],
-                         foreground=Styles.colours["yellow"],
-                         width=100, font=Styles.fonts["entry"])
+                        justify=CENTER, bg=Styles.colours["darkGrey"],
+                        foreground=Styles.colours["yellow"],
+                        width=100, font=Styles.fonts["entry"])
 
-        consoletext = Text(footerframe,height=5,width=80,bg=Styles.colours["darkGrey"],foreground=Styles.colours["grey"],state=NORMAL,relief=FLAT,font=Styles.fonts["console"])
-        consoletext.insert(END,"Welcome to Project Bi")
+        consoletext = Text(footerframe, height=5, width=80, bg=Styles.colours["darkGrey"],
+                           foreground=Styles.colours["grey"], state=NORMAL, relief=FLAT, font=Styles.fonts["console"])
+        consoletext.insert(END, "Welcome to Project Bi")
         consoletext.config(state=DISABLED)
         self.console.setconsolefield(consoletext)
-        scroll = Scrollbar(footerframe, command=consoletext.yview,relief=FLAT)
+        scroll = Scrollbar(footerframe, command=consoletext.yview, relief=FLAT)
         consoletext.configure(yscrollcommand=scroll.set)
 
-        self.boptimize = yellowbutton(footerframe,"Optimize",20,lambda e: self.observerstage())
+        self.boptimize = yellowbutton(footerframe, "Optimize", 20, lambda e: self.observerstage())
         deactivatebutton(self.boptimize)
-        self.boptimize.pack(side=RIGHT, fill=BOTH, padx=5,pady=5)
+        self.boptimize.pack(side=RIGHT, fill=BOTH, padx=5, pady=5)
         self.boptimize.configure(font=Styles.fonts["h1Button"])
 
         title.pack(side=LEFT, fill=BOTH)
         scroll.pack(side=LEFT, fill=BOTH)
         consoletext.pack(side=LEFT, fill=BOTH)
-        footerframe.grid(row=2,column=0,sticky=W+E+N+S,columnspan=2)
+        footerframe.grid(row=2, column=0, sticky=W + E + N + S, columnspan=2)
 
         return footerframe
 
-    def ready(self,section):
+    # Update the ready parameter for the given section
+    def ready(self, section):
         self.isready[section] = True
         if False not in self.isready.values():
-            activateyellowbutton(self.boptimize,lambda e: self.observerstage())
+            activateyellowbutton(self.boptimize, lambda e: self.observerstage())
 
-    def notready(self,section):
+    # Update the ready parameter for the given section
+    def notready(self, section):
         deactivatebutton(self.boptimize)
         self.isready[section] = False
 
+    # Destroy current stage and
+    # Create the Observation stage panels
     def observerstage(self):
         self.currentstage.destroy()
         self.headerframe.observationstage()
         contentframe = Frame(self.master)
-        self.currentstage = observation(contentframe,self.console,self.params)
-        contentframe.grid(row=1,column=0)
-        self.connector = guiconnector(self.console,self.currentstage,self.modelsready)
+        self.currentstage = observation(contentframe, self.console, self.params)
+        contentframe.grid(row=1, column=0)
+        self.connector = guiconnector(self.console, self.currentstage, self.modelsready)
         self.connector.start(self.params)
-        redbutton(self.boptimize,"End")
+        redbutton(self.boptimize, "End")
 
         def closeWindow():
-             self.connector.closestage()
-             self.master.destroy()
+            self.connector.closestage()
+            self.master.destroy()
 
         def endbayes(e):
             self.boptimize.config(text="Saving Data...")
@@ -136,26 +152,36 @@ class projectbgui:
         self.master.protocol("WM_DELETE_WINDOW", closeWindow)
         self.boptimize.bind("<Button-1>", endbayes)
 
-    def modelsready(self,experiments):
+    # Update the button once bayes opt has finished
+    def modelsready(self, experiments):
         self.boptimize.config(text="Models")
-        activateyellowbutton(self.boptimize,lambda e: self.evaluationstage(experiments))
+        activateyellowbutton(self.boptimize, lambda e: self.evaluationstage(experiments))
 
-    def evaluationstage(self,experiments):
+    # Destroy current stage and
+    # Create the Evaluation stage panels
+    def evaluationstage(self, experiments):
         self.currentstage.destroy()
         self.boptimize.destroy()
         self.headerframe.evaluationstage()
-        evaluation(self.params,experiments,self.connector,self.master,self.console)
+        evaluation(self.params, experiments, self.connector, self.master, self.console)
+
+
+"""
+Following class provides a link between the UI and the BayesOpt process via pipes.
+"""
+
 
 class guiconnector():
-    def __init__(self,console,observer,modelsready):
+    def __init__(self, console, observer, modelsready):
         self.console = console
         self.observer = observer
         self.modelsready = modelsready
 
-    def start(self,params):
-        self.a, self.b = Pipe(duplex = True)
+    # Starts up data structures
+    def start(self, params):
+        self.a, self.b = Pipe(duplex=True)
         self.p = Process(target=bayesianthread.BayesianOptProcess, kwargs={
-            "params":parseintosimple(params),
+            "params": parseintosimple(params),
             "pipein": self.a,
             "pipeout": self.b
         })
@@ -163,6 +189,7 @@ class guiconnector():
         self.t.start()
         self.p.start()
 
+    # Listnere for data from the BayesOpt Process
     def bayesoptlistener(self):
         pipein = self.a
         pipeout = self.b
@@ -174,28 +201,27 @@ class guiconnector():
                     break
                 if output.has_key("stopped_bayes"):
                     self.modelsready(output["stopped_bayes"])
-                for k,v in output.items():
+                for k, v in output.items():
                     if k == "console":
                         self.console.log(v)
                     else:
-                        self.observer.updatevar(k,v)
+                        self.observer.updatevar(k, v)
 
-    def queryposterior(self,xdata,modelid):
-        self.a.send({"posterior":xdata,"modelid":modelid})
+    # Request the BayesOpt Process for the posterior of the given model
+    def queryposterior(self, xdata, modelid):
+        self.a.send({"posterior": xdata, "modelid": modelid})
 
+    # Finish BayesOpt
     def endbayesopt(self):
-        self.a.send({"stop":True,"stop_posterior_connector":True})
+        self.a.send({"stop": True, "stop_posterior_connector": True})
         self.console.log("Attempting to stop the Bayesian Optimization")
         self.console.log("Please Wait...")
         self.console.log("Saving the data...")
 
+    # Clear up the processes and close the pipes
     def closestage(self):
-        self.b.send({"stop_connector":True})
+        self.b.send({"stop_connector": True})
         self.endbayesopt()
         self.a.close()
         self.b.close()
         self.p.terminate()
-
-
-
-

@@ -1,17 +1,26 @@
-__author__ = 'doniy'
+try:
+    from Tkinter import NW, Frame, W, N, S, Checkbutton, Radiobutton, Label, Toplevel, Text, END, Scrollbar, WORD, E, \
+        CENTER, BOTH, X
+except:
+    from tkinter import NW, Frame, W, N, S, Checkbutton, Radiobutton, Label, Toplevel, Text, END, Scrollbar, WORD, E, \
+        CENTER, BOTH, X
 
 from factories import *
-from Tkinter import NW, Frame, W, N, S, Checkbutton, Radiobutton, Label, Toplevel, Text, END, Scrollbar, WORD, E, \
-    CENTER, BOTH, X
 from numpy import genfromtxt, fromstring, array
 from styles import Styles
 
+"""
+ The module contains all the widget initialization and event listeners for the buttons.
+"""
 
+
+# Advanced Settings Window panel
 class AdvancedSettings():
     def __init__(self, console, params):
         self.console = console
         self.params = params
-        self.advsettingslist = ["solver", "initializer", "recommender", "normalize", "data", "dims", "dimscheudler", "gpsf",
+        self.advsettingslist = ["solver", "initializer", "recommender", "normalize", "data", "dims", "dimscheudler",
+                                "gpsf",
                                 "gpmu", "gpell", "gpsn", "priorsnscale", "priorsnmin", "priorsfmu", "priorsfsigma",
                                 "priorsfmin", "priorella", "priorellb", "priormumu", "priormuvar", "mcmcburn", "mcmcn",
                                 "eixi", "pixi", "ucbdelta", "ucbxi", "thompsonn", "thompsonrng"]
@@ -110,10 +119,9 @@ class AdvancedSettings():
         minitnumber = Message(f, text="Numbers of samples to sample:", width=300, bg=Styles.colours["grey"])
         einitnumber = smallentry(f, self.params["initializernum"], 10)
         minitnumber.grid(row=0, column=0, sticky=W, columnspan=1)
-        einitnumber.grid(row=0, column=1, sticky=W, columnspan=1,padx=10)
+        einitnumber.grid(row=0, column=1, sticky=W, columnspan=1, padx=10)
 
         f.grid(row=9, column=0, sticky=W, columnspan=2)
-
 
     def mcmc(self):
         mcmcheader = headersmall(self.frame, text="Markov Chain Monte Carlo Settings:")
@@ -211,7 +219,7 @@ class AdvancedSettings():
 
         dataheader = headersmall(self.frame, text="Add Data")
 
-        if type(self.params["data"].get()) == str or self.params["data"]==[[],[]]:
+        if type(self.params["data"].get()) == str or self.params["data"] == [[], []]:
             bdata = yellowbutton(self.frame, "Select Data File", 20, click=None)
             edata = entry(self.frame, self.params["data"], 30, file=True, fileCheck=True, button=bdata)
 
@@ -220,7 +228,7 @@ class AdvancedSettings():
         else:
             bdata = yellowbutton(self.frame, "Data has already been selected", 50, click=None)
             deactivatebutton(bdata)
-            bdata.config(state=DISABLED,bg=Styles.colours["deactivated"])
+            bdata.config(state=DISABLED, bg=Styles.colours["deactivated"])
             bdata.grid(row=19, column=4, sticky=W, columnspan=2)
 
         dataheader.grid(row=18, column=3, sticky=W, columnspan=2)
@@ -247,8 +255,9 @@ class AdvancedSettings():
         f.pack(fill=X)
 
 
+# Model paramters panel
 class ModelFrame():
-    def __init__(self, master, console, params, row, col,maingui):
+    def __init__(self, master, console, params, row, col, maingui):
         self.frame = Frame(master)
         self.maingui = maingui
         self.frame.config(padx=20, pady=20, bg=Styles.colours["grey"])
@@ -430,7 +439,7 @@ class ModelFrame():
             cancelboundsbutton.grid(row=5, padx=3, column=1, columnspan=1)
 
         boundsheader = header(self.frame, "Set model bounds:")
-        bboundsm = yellowbutton(self.frame,"Set or View Bounds" , 40, click=manualbounds)
+        bboundsm = yellowbutton(self.frame, "Set or View Bounds", 40, click=manualbounds)
         bboundsf = yellowbutton(self.frame, "From File", 20, click=boundsfilepicker)
         self.isreadyB(bboundsf)
 
@@ -472,8 +481,9 @@ class ModelFrame():
         return True
 
 
+# Bayesian Optimization Panel
 class ModelBayes():
-    def __init__(self, master, console, params, row, col,maingui):
+    def __init__(self, master, console, params, row, col, maingui):
         self.frame = Frame(master)
         self.maingui = maingui
         self.frame.config(padx=20, pady=20, bg=Styles.colours["grey"])
