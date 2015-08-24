@@ -38,11 +38,11 @@ Usage (GUI)
 ============
 To invoke the Graphical User Interface, you need to type in following command into the command line:
 	
-		python -m projectb
+		python -m projectb.start
 
 This will launch the GUI of the framework. You may also specify the settings file to prefill the fields in the UI.
 
-		python -m projectb /home/user/settingsfile.projectb
+		python -m projectb.start /home/user/settingsfile.projectb
 
 Your settings file can have any extension name, but for clarity purposes keep it simple and relevant. 
 
@@ -50,11 +50,11 @@ Usage (Command Line)
 ============
 The framework can be executed via commandline, but you must specify a settings file. Settings file format is a CSV file, with one parameters per line. You will find the specification for the settings file in the next section. Alternatively, you may create a settings file via the GUI by exporting the settings defined in the UI. To invoke the command line, you simply add -cli to the command.
 
-		python -m projectb /home/user/settingsfile.projectb -cli
+		python -m projectb.start /home/user/settingsfile.projectb -cli
 
 Optionally, you can specify the output directory during the invokation.
 
-		python -m projectb /home/user/settingsfile.projectb /home/user/outputhere/ -cli
+		python -m projectb.start /home/user/settingsfile.projectb /home/user/outputhere/ -cli
 
 It is adviced to provide an output directory, otherwise the framework will write to the directory called from. 
 

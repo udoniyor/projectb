@@ -5,7 +5,7 @@ except:
     from tkinter import Tk, FALSE, Frame, BOTH, END, DISABLED, Message, LEFT, RIGHT, NORMAL, CENTER, Text, Scrollbar, \
         FLAT, N, S, E, W
 
-from multiprocessing import Process, Pipe
+from multiprocessing import Process, Pipe, freeze_support
 import threading
 
 from selection import ModelFrame, ModelBayes
@@ -75,6 +75,7 @@ class projectbgui:
             "thompsonrng": customvar(0, "Thompson policy RNG", self.console)
         }
 
+
         self.isready = {"model": False, "bayes": True}
         self.headerframe = mainheader(self.master, self.console, self.params,self)
         self.currentstage = self.selectionstage()
@@ -84,6 +85,7 @@ class projectbgui:
         if paramin is not None:
             parsemodifycustomvar(self.params, parsein(paramin, parseintosimple(self.params), self.console))
             self.ready("model")
+
         self.master.mainloop()
 
     # Create the Selection stage panels
@@ -185,14 +187,16 @@ class guiconnector():
     # Starts up data structures
     def start(self, params):
         self.a, self.b = Pipe(duplex=True)
-        self.p = Process(target=bayesianthread.BayesianOptProcess, kwargs={
-            "params": parseintosimple(params),
-            "pipein": self.a,
-            "pipeout": self.b
-        })
-        self.t = threading.Thread(target=self.bayesoptlistener)
-        self.t.start()
-        self.p.start()
+        freeze_support()
+        if __name__ == "maingui":
+            self.p = Process(target=bayesianthread.BayesianOptProcess, kwargs={
+                "params": parseintosimple(params),
+                "pipein": self.a,
+                "pipeout": self.b
+            })
+            self.t = threading.Thread(target=self.bayesoptlistener)
+            self.t.start()
+            self.p.start()
 
     # Listnere for data from the BayesOpt Process
     def bayesoptlistener(self):

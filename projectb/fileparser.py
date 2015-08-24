@@ -200,7 +200,7 @@ def parsemodifycustomvar(customvarsparam, simpleparams):
             else:
                 customvarsparam[key] = value
         elif key == "normalize" or key == "dimscheudler":
-            if simpleparams[key]:
+            if simpleparams[key] == "True":
                 customvarsparam[key].set(1)
             else:
                 customvarsparam[key].set(0)
