@@ -38,6 +38,11 @@ def main(argv):
         elif args.verbosity >= 2:
             print "verbosity turned 2"
         console(verbosity=args.verbosity)
+        try:
+            import nlopt
+            solver = "direct"
+        except:
+            solver = "lbfgs"
         defaultparams = {
             "command": " i.e. python C://Users/Desktop/model/final4.py",
             "modelinput": "Select Input File",
@@ -48,7 +53,7 @@ def main(argv):
             "kernels": ["se"],
             "iter": 150,
             "objective": "min",
-            "solver": "direct",
+            "solver": solver,
             "initializer": "sobol",
             "initializernum": 30,
             "recommender": "latent",

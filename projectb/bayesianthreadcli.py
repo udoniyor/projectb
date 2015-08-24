@@ -18,7 +18,7 @@ import pygp
 import inspect
 import functools
 import time
-import projectb.objwrapper
+import CGOModel from projectb.objwrapper
 
 # update a recarray at the end of solve_bayesopt.
 from numpy.lib.recfunctions import append_fields
@@ -43,7 +43,7 @@ class BayesianOptProcess():
         self.outputdir = "" if self.params["outputdir"] == "Output Directory" else self.params["outputdir"]
 
         # Create an objective function from the parameters
-        modelfunc = objwrapper.CGOModel(
+        modelfunc = CGOModel(
             command=params["command"],
             inputURI=params["modelinput"],
             outputURI=params["modeloutput"],
@@ -140,7 +140,7 @@ class BayesianOptProcess():
         # Start BayesOpt
         for i in xrange(model.ndata, niter):
             # Record current time
-            start = time.start()
+            start = time.clock()
             # get the next point to evaluate.
             index = policy(model)
             x, _ = solver(index, bounds)

@@ -15,7 +15,7 @@ import pygp
 import inspect
 import functools
 import time
-import projectb.objwrapper
+import CGOModel from projectb.objwrapper
 
 # update a recarray at the end of solve_bayesopt.
 from mwhutils.random import rstate
@@ -41,10 +41,10 @@ class BayesianOptProcess():
         self.stop = False
         self.pipeout = pipeout
         self.outputdir = "" if self.params["outputdir"] == "Output Directory" else self.params["outputdir"]
-        self.console = lambda v: pipeout.send({"console": v})
+        self.console = lambda t,v=2: pipeout.send({"console": {"text":t,"verbose":v}})
 
         # Create an objective function from the parameters
-        modelfunc = objwrapper.CGOModel(
+        modelfunc = CGOModel(
             command=params["command"],
             inputURI=params["modelinput"],
             outputURI=params["modeloutput"],
@@ -102,6 +102,7 @@ class BayesianOptProcess():
             else:
                 m = self.solve_bayesopt(**e)
             self.models.append(m)
+            del e["objective"]
             e.update({"iterfinish": m["iterfinish"], "best": np.max(m["model"].data[1]), "time": time.clock() - start,
                       "modelid": i})
         self.console("Ended Bayesian Optimization")
@@ -185,7 +186,7 @@ class BayesianOptProcess():
         # Start BayesOpt
         for i in xrange(model.ndata, niter):
             # Record current time and iteration
-            start = time.start()
+            start = time.clock()
             curiter = i
             # Check if Observer has terminated the process
             if self.pipeout.poll():

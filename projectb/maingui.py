@@ -27,6 +27,11 @@ class projectbgui:
         self.master.resizable(width=FALSE, height=FALSE)
         self.console = console()
         # Set up intial parameters
+        try:
+            import nlopt
+            solver = "direct"
+        except:
+            solver = "lbfgs"
         self.params = {
             "command": customvar(" i.e. python C://Users/Desktop/model/final4.py", "Model Command", self.console),
             "modelinput": customvar("Select Input File", "Model Input File", self.console),
@@ -39,7 +44,7 @@ class projectbgui:
                         customvar(False, "Matern 3", self.console), customvar(False, "Matern 1", self.console)],
             "iter": customvar(150, "Iterations", self.console),
             "objective": customvar("max", "Objective", self.console),
-            "solver": customvar("direct", "Solver", self.console),
+            "solver": customvar(solver, "Solver", self.console),
             "initializer": customvar("sobol", "Initialization", self.console),
             "initializernum": customvar(30, "Samples to sample by the initializer", self.console),
             "recommender": customvar("latent", "Recommender", self.console),
@@ -203,7 +208,7 @@ class guiconnector():
                     self.modelsready(output["stopped_bayes"])
                 for k, v in output.items():
                     if k == "console":
-                        self.console.log(v)
+                        self.console.log(v["text"],v["verbose"])
                     else:
                         self.observer.updatevar(k, v)
 

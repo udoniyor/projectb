@@ -110,7 +110,11 @@ class observation():
 
     # Create the graph base
     def startgraph(self):
-        pl.style.use('ggplot')
+        #Older versions of matplot do not support style command
+        try:
+            pl.style.use('ggplot')
+        except:
+            pass
         root = Frame(self.frame)
         self.graphframem = root
         root.config(padx=20, pady=20, bg=Styles.colours["grey"])

@@ -7,7 +7,7 @@ import subprocess
 class CMDToPython:
     def __init__(self, command, inputURI, outputURI, console=None):
         self.FNULL = open(os.devnull, 'w')
-        self.command = command
+        self.command = command.split(" ")
         self.inputLocation = inputURI
         self.outputLocation = outputURI
         self.console = console
