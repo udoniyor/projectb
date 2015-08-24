@@ -19,8 +19,8 @@ class console():
             else:
                 print(message)
 
-    def log(self, text):
-        self.__call__(text)
+    def log(self, message, messageverbosity=2):
+        self.__call__(message,messageverbosity)
 
     # If used by the GUI, set the textbox to log the text to
     def setconsolefield(self, consolefield):

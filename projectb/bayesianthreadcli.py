@@ -18,7 +18,7 @@ import pygp
 import inspect
 import functools
 import time
-from projectb.objwrapper import CGOModel 
+from projectb.objwrapper import CGOModel
 
 # update a recarray at the end of solve_bayesopt.
 from numpy.lib.recfunctions import append_fields
