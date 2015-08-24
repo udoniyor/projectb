@@ -15,7 +15,7 @@ import pygp
 import inspect
 import functools
 import time
-import CGOModel from projectb.objwrapper
+from projectb.objwrapper import CGOModel
 
 # update a recarray at the end of solve_bayesopt.
 from mwhutils.random import rstate
