@@ -454,7 +454,7 @@ class ModelFrame():
     def isreadyB(self, b, t=3000):
         def timedcheck():
             if self.checkall():
-                self.maingui("model")
+                self.maingui.ready("model")
             else:
                 self.console.notready("model")
 
