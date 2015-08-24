@@ -45,7 +45,7 @@ class projectbgui:
             "recommender": customvar("latent", "Recommender", self.console),
             "normalize": customvar(False, "Normalize", self.console),
             "data": customvar("Select Data File", "Data File URI", self.console),
-            "dims": customvar(0, "Dimension Scheduler dimensions per iterations", self.console),
+            "dims": customvar(2, "Dimension Scheduler dimensions per iterations", self.console),
             "dimscheudler": customvar(False, "Dimension Scheduler", self.console),
             "gpsf": customvar("np.std(Y)", "GP sf", self.console),
             "gpmu": customvar("np.mean(Y)", "GP mu", self.console),

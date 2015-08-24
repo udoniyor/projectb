@@ -32,113 +32,114 @@ def parsein(file, params, console=None):
         for line in f:
             splitline = line.replace("\n", "").split(",")
             param = splitline[0].lower()
-            if (params.has_key(param)):
-                if param in booleanparams:
-                    try:
-                        params[param] = bool(splitline[1])
-                    except:
-                        if console is not None:
-                            console.log("The " + param + " must be a boolean, please check the file")
-                        else:
-                            raise ValueError(("The " + param + " does must be a boolean, please check the file"))
-                if param == "bounds":
-                    try:
-                        if not boundseen:
-                            params["bounds"][:] = []
-                        boundseen = True
-                        params["bounds"].append([float(splitline[1]), float(splitline[2])])
-                    except:
-                        if console is not None:
-                            console.log("The bound values are not numbers, please check the file")
-                        else:
-                            raise ValueError(("The bound values are not numbers, please check the file"))
-                elif (param == "objective"):
-                    if splitline[1] in objectives:
-                        params[param] = splitline[1]
-                    else:
-                        if console is not None:
-                            console.log("The objective " + splitline[1] + " does not exist, please check the file")
-                        else:
-                            raise ValueError(
-                                ("The objective " + splitline[1] + " does not exist, please check the file"))
-                elif (param == "solver"):
-                    if splitline[1] in solvers:
-                        params[param] = splitline[1]
-                    else:
-                        if console is not None:
-                            console.log("The solver " + splitline[1] + " does not exist, please check the file")
-                        else:
-                            raise ValueError(("The solver " + splitline[1] + " does not exist, please check the file"))
-                elif (param == "initializer"):
-                    if splitline[1] in initializers:
-                        params[param] = splitline[1]
-                    else:
-                        if console is not None:
-                            console.log("The initializer " + splitline[1] + " does not exist, please check the file")
-                        else:
-                            raise ValueError(
-                                ("The initializer " + splitline[1] + " does not exist, please check the file"))
-                elif (param == "recommender"):
-                    if splitline[1] in recommenders:
-                        params[param] = splitline[1]
-                    else:
-                        if console is not None:
-                            console.log("The recommender " + splitline[1] + " does not exist, please check the file")
-                        else:
-                            raise ValueError(
-                                ("The recommender " + splitline[1] + " does not exist, please check the file"))
-                elif (param == "policies"):
-                    for policy in splitline[1:]:
-                        if policy in policies:
-                            params[param].append(policy)
+            if param != "":
+                if (params.has_key(param)):
+                    if param in booleanparams:
+                        try:
+                            params[param] = bool(splitline[1])
+                        except:
+                            if console is not None:
+                                console.log("The " + param + " must be a boolean, please check the file")
+                            else:
+                                raise ValueError(("The " + param + " does must be a boolean, please check the file"))
+                    if param == "bounds":
+                        try:
+                            if not boundseen:
+                                params["bounds"][:] = []
+                            boundseen = True
+                            params["bounds"].append([float(splitline[1]), float(splitline[2])])
+                        except:
+                            if console is not None:
+                                console.log("The bound values are not numbers, please check the file")
+                            else:
+                                raise ValueError(("The bound values are not numbers, please check the file"))
+                    elif (param == "objective"):
+                        if splitline[1] in objectives:
+                            params[param] = splitline[1]
                         else:
                             if console is not None:
-                                console.log("The policy values " + policy + " does not exist, please check the file")
+                                console.log("The objective " + splitline[1] + " does not exist, please check the file")
                             else:
                                 raise ValueError(
-                                    ("The policy values " + policy + " does not exist, please check the file"))
-                elif (param == "kernels"):
-                    for kernel in splitline[1:]:
-                        if kernel in kernels:
-                            params[param].append(kernel)
+                                    ("The objective " + splitline[1] + " does not exist, please check the file"))
+                    elif (param == "solver"):
+                        if splitline[1] in solvers:
+                            params[param] = splitline[1]
                         else:
                             if console is not None:
-                                console.log("The kernel values " + kernel + " does not exist, please check the file")
+                                console.log("The solver " + splitline[1] + " does not exist, please check the file")
                             else:
-                                raise ValueError(
-                                    ("The kernel values " + kernel + " does not exist, please check the file"))
-                elif (param == "data"):
-                    params["data"] = [[], []]
-                    if splitline[1] is not None:
-                        if os.path.isfile(splitline[1]):
-                            with open(splitline[1], "r") as datafile:
-                                for x in datafile:
-                                    add_data(np.fromstring(line, dtype=float, sep=','))
+                                raise ValueError(("The solver " + splitline[1] + " does not exist, please check the file"))
+                    elif (param == "initializer"):
+                        if splitline[1] in initializers:
+                            params[param] = splitline[1]
                         else:
                             if console is not None:
-                                console.log("The " + splitline[1] + " data file does not exists, check the file URI")
+                                console.log("The initializer " + splitline[1] + " does not exist, please check the file")
                             else:
                                 raise ValueError(
-                                    "The " + splitline[1] + " data file does not exists, check the file URI")
+                                    ("The initializer " + splitline[1] + " does not exist, please check the file"))
+                    elif (param == "recommender"):
+                        if splitline[1] in recommenders:
+                            params[param] = splitline[1]
+                        else:
+                            if console is not None:
+                                console.log("The recommender " + splitline[1] + " does not exist, please check the file")
+                            else:
+                                raise ValueError(
+                                    ("The recommender " + splitline[1] + " does not exist, please check the file"))
+                    elif (param == "policies"):
+                        for policy in splitline[1:]:
+                            if policy in policies:
+                                params[param].append(policy)
+                            else:
+                                if console is not None:
+                                    console.log("The policy values " + policy + " does not exist, please check the file")
+                                else:
+                                    raise ValueError(
+                                        ("The policy values " + policy + " does not exist, please check the file"))
+                    elif (param == "kernels"):
+                        for kernel in splitline[1:]:
+                            if kernel in kernels:
+                                params[param].append(kernel)
+                            else:
+                                if console is not None:
+                                    console.log("The kernel values " + kernel + " does not exist, please check the file")
+                                else:
+                                    raise ValueError(
+                                        ("The kernel values " + kernel + " does not exist, please check the file"))
+                    elif (param == "data"):
+                        params["data"] = [[], []]
+                        if splitline[1] is not None:
+                            if os.path.isfile(splitline[1]):
+                                with open(splitline[1], "r") as datafile:
+                                    for x in datafile:
+                                        add_data(np.fromstring(line, dtype=float, sep=','))
+                            else:
+                                if console is not None:
+                                    console.log("The " + splitline[1] + " data file does not exists, check the file URI")
+                                else:
+                                    raise ValueError(
+                                        "The " + splitline[1] + " data file does not exists, check the file URI")
 
+                        else:
+                            break;
                     else:
-                        break;
+                        if param in paramsfloats:
+                            try:
+                                params[param] = float(splitline[1])
+                            except:
+                                ValueError(('The parameter ' + param + " must be a float"))
+                        elif param in paramsint:
+                            try:
+                                params[param] = int(float(splitline[1]))
+                            except:
+                                ValueError(('The parameter ' + param + " must be an interger"))
+                        else:
+                            params[param] = ",".join(splitline[1:])
                 else:
-                    if param in paramsfloats:
-                        try:
-                            params[param] = float(splitline[1])
-                        except:
-                            ValueError(('The parameter ' + param + " must be a float"))
-                    elif param in paramsint:
-                        try:
-                            params[param] = int(float(splitline[1]))
-                        except:
-                            ValueError(('The parameter ' + param + " must be an interger"))
-                    else:
-                        params[param] = ",".join(splitline[1:])
-            else:
-                raise ValueError(
-                    ('The parameter ' + param + " does not exists, please check the parameter name syntax"))
+                    raise ValueError(
+                        ('The parameter ' + param + " does not exists, please check the parameter name syntax"))
 
         for line in f:
             add_data(np.fromstring(line, dtype=float, sep=','))
@@ -158,6 +159,8 @@ def parseintosimple(customvarparms):
             return filter(None, [v if value[k].get() else None for (k, v) in kernels.items()])
         elif key == "bounds":
             return value
+        elif key == "normalize" or "dimscheudler":
+            return True if value == 1 else False
         elif key == "data":
             data = [[], []]
             if os.path.isfile(value.get()):
