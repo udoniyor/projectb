@@ -159,7 +159,7 @@ def parseintosimple(customvarparms):
             return filter(None, [v if value[k].get() else None for (k, v) in kernels.items()])
         elif key == "bounds":
             return value
-        elif key == "normalize" or "dimscheudler":
+        elif key == "normalize" or key == "dimscheudler":
             return True if value == 1 else False
         elif key == "data":
             data = [[], []]
