@@ -58,7 +58,7 @@ def main(argv):
             "initializernum": 30,
             "recommender": "latent",
             "normalize": False,
-            "data": "Select Data File",
+            "data": [[],[]],
             "dims": 2,
             "dimscheudler": False,
             "gpsf": "np.std(Y)",

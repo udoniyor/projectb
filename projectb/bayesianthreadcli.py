@@ -330,14 +330,14 @@ class BayesianOptProcess():
         elif data == [[], []]:
             self.console("You must provide data or have more than zero N initial points to sample", 0)
             ValueError(("You must provide data or have more than zero N initial points to sample"))
-
-        allX = np.concatenate((data[0], X), axis=0) if len(data[0]) > 0 else X
-        allY = np.concatenate((data[1], Y), axis=0) if len(data[1]) > 0 else Y
+        elif data != [[],[]]:
+            X = np.concatenate((data[0], X), axis=0) if len(data[0]) > 0 else X
+            Y = np.concatenate((data[1], Y), axis=0) if len(data[1]) > 0 else Y
 
         self.console("Creating a model", 2)
-        m = self.createNewModel(allX, allY, bounds, kernel)
+        m = self.createNewModel(X, Y, bounds, kernel)
         self.console("Adding init data to the model", 2)
-        m.add_data(allX, allY)
+        m.add_data(X, Y)
         return m
 
     # Returns a n random dimension from a probability dist. provided
