@@ -1,9 +1,9 @@
 import sys
 import argparse
-from maingui import projectbgui
-import fileparser
-import bayesianthreadcli
-from consoles import console
+from projectb.maingui import projectbgui
+from projectb.fileparser import *
+from projectb.bayesianthreadcli import BayesianOptProcess 
+from projectb.consoles import console
 
 
 # Main class to invoke GUI or CLI
@@ -84,7 +84,7 @@ def main(argv):
             "thompsonrng": 0
         }
         # Start Bayes Opt
-        bayesianthreadcli.BayesianOptProcess(fileparser.parsein(args.paramfile, defaultparams, c),
+        BayesianOptProcess(parsein(args.paramfile, defaultparams, c),
                                              console=c)
     else:
         # Check if the Graphical libraries are present

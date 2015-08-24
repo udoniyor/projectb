@@ -49,9 +49,10 @@ class BayesianOptProcess():
             outputURI=params["modeloutput"],
             bounds=params["bounds"],
             console=self.console,
-            normalize=bool(params["normalize"]),
+            normalize=(params["normalize"]),
             minmax=1 if params["objective"] == "max" else -1
         )
+
         # Shortcut to setup the policies
         policyshortcut = {
             "ei": ("ei", {"xi": float(self.params["eixi"])}),
@@ -78,6 +79,9 @@ class BayesianOptProcess():
 
     # Go through all experiments and update the on what is happening via the console
     def run(self):
+        self.console("Normalization: "+str((self.params["normalize"])),2)
+        self.console("Solver: "+(self.params["solver"]),2)
+        self.console("Objective: "+(self.params["objective"]),2)
         for i, e in enumerate(self.experiments):
             self.console("Starting with " + e["policy"][0] + " and " + e["kernel"] + " kernel.", 1)
             if self.params["dimscheudler"]:

@@ -36,7 +36,9 @@ def parsein(file, params, console=None):
                 if (params.has_key(param)):
                     if param in booleanparams:
                         try:
-                            params[param] = bool(splitline[1])
+                            print(param,":",splitline[1],":",type(splitline[1]))
+                            params[param] = True if (str(splitline[1])).lower() == "true" else False
+                            print(param,":",params[param],":",type(params[param]))
                         except:
                             if console is not None:
                                 console.log("The " + param + " must be a boolean, please check the file")

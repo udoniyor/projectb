@@ -8,15 +8,15 @@ except:
 from multiprocessing import Process, Pipe, freeze_support
 import threading
 
-from selection import ModelFrame, ModelBayes
-from styles import Styles
-from factories import yellowbutton, deactivatebutton, activateyellowbutton, customvar, redbutton
-from observation import observation
-from evaluate import evaluation
-from fileparser import parsemodifycustomvar, parsein, parseintosimple
-import bayesianthread
-from header import mainheader
-from consoles import console
+from projectb.selection import ModelFrame, ModelBayes
+from projectb.styles import Styles
+from projectb.factories import yellowbutton, deactivatebutton, activateyellowbutton, customvar, redbutton
+from projectb.observation import observation
+from projectb.evaluate import evaluation
+from projectb.fileparser import parsemodifycustomvar, parsein, parseintosimple
+from projectb.bayesianthread import BayesianOptProcess
+from projectb.header import mainheader
+from projectb.consoles import console
 
 
 # Main GUI window class
@@ -188,8 +188,8 @@ class guiconnector():
     def start(self, params):
         self.a, self.b = Pipe(duplex=True)
         freeze_support()
-        if __name__ == "maingui":
-            self.p = Process(target=bayesianthread.BayesianOptProcess, kwargs={
+        if __name__ == "projectb.maingui":
+            self.p = Process(target=BayesianOptProcess, kwargs={
                 "params": parseintosimple(params),
                 "pipein": self.a,
                 "pipeout": self.b
