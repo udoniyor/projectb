@@ -80,7 +80,7 @@ class BayesianOptProcess():
     def run(self):
         for i, e in enumerate(self.experiments):
             self.console("Starting with " + e["policy"][0] + " and " + e["kernel"] + " kernel.", 1)
-            if bool(int(self.params["dimscheudler"])):
+            if self.params["dimscheudler"]:
                 e.update({"dims": int(self.params["dims"])})
                 self.solve_bayesopt_dim(**e)
             else:
