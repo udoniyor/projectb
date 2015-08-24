@@ -39,7 +39,7 @@ class AdvancedSettings():
         self.mcmc()
         self.policyset()
         self.dimscheduler()
-        Label(self.frame, text="     ").grid(row=1, column=3, sticky=W, columnspan=1)
+        Label(self.frame, text="     ", bg=Styles.colours["grey"]).grid(row=1, column=3, sticky=W, columnspan=1)
         self.basicgp()
         self.prior()
         self.data()
@@ -116,8 +116,10 @@ class AdvancedSettings():
 
     def initnumber(self):
         f = Frame(self.frame)
+        f.config(bg=Styles.colours["grey"])
         minitnumber = Message(f, text="Numbers of samples to sample:", width=300, bg=Styles.colours["grey"])
         einitnumber = smallentry(f, self.params["initializernum"], 10)
+
         minitnumber.grid(row=0, column=0, sticky=W, columnspan=1)
         einitnumber.grid(row=0, column=1, sticky=W, columnspan=1, padx=10)
 
@@ -139,6 +141,7 @@ class AdvancedSettings():
     def policyset(self):
         mischeader = headersmall(self.frame, text="Policy Parameters")
         fp = Frame(self.frame)
+        fp.config(bg=Styles.colours["grey"])
         smallentryframetextv(fp, 0, 0, self.params["eixi"], 10, "EI xi:")
         smallentryframetextv(fp, 2, 0, self.params["pixi"], 10, "PI xi:")
         smallentryframetextv(fp, 0, 1, self.params["ucbdelta"], 10, "UCB delta:")
@@ -154,7 +157,7 @@ class AdvancedSettings():
         f = Frame(self.frame)
         f.config(bg=Styles.colours["grey"])
         smallentryframetext(f, 0, 0, self.params["dims"], 7, "Set Size:")
-        checkdimschel = Checkbutton(self.frame, text="Enable", variable=self.params["dimscheudler"])
+        checkdimschel = Checkbutton(self.frame, text="Enable", variable=self.params["dimscheudler"], bg=Styles.colours["grey"])
 
         mischeader.grid(row=18, column=0, sticky=W, columnspan=2)
         checkdimschel.grid(row=19, column=0, sticky=W, columnspan=1, padx=15)
@@ -166,14 +169,14 @@ class AdvancedSettings():
         f.config(padx=20, bg=Styles.colours["grey"])
         gpsf, _ = smallentryframetext(f, 0, 0, self.params["gpsf"], 20, "sf:")
         gpmu, _ = smallentryframetext(f, 1, 0, self.params["gpmu"], 20, "mu:")
-        Label(f, text="     ").grid(row=0, column=2, sticky=W, rowspan=2)
+        Label(f, text="     ", bg=Styles.colours["grey"]).grid(row=0, column=2, sticky=W, rowspan=2)
         gpell, _ = smallentryframetext(f, 0, 3, self.params["gpell"], 20, "ell:")
         gpsn, _ = smallentryframetext(f, 1, 3, self.params["gpsn"], 20, "sn:")
 
         gpheader.grid(row=1, column=4, sticky=W, columnspan=1)
         Message(self.frame, text="You can use numpy and python syntax to set the parameters from the data where"
                                  " X is the initial and random data, and y is the corresponding output",
-                width=400, font=Styles.fonts["entry"]).grid(row=2, column=4, columnspan=2, sticky=W)
+                width=400, font=Styles.fonts["entry"], bg=Styles.colours["grey"]).grid(row=2, column=4, columnspan=2, sticky=W)
         f.grid(row=3, column=4, sticky=W, columnspan=2, rowspan=3)
 
     def prior(self):
@@ -184,7 +187,7 @@ class AdvancedSettings():
         Message(f, text="Horseshoe Prior sn:", width=200, bg=Styles.colours["grey"], font=Styles.fonts["entry"]).grid(
             row=0, column=0, columnspan=2, sticky=W)
         epriorsnscale = smallentry(f, self.params["priorsnscale"], 15)
-        mpriorsnscale = Message(f, text="scale:", width=30)
+        mpriorsnscale = Message(f, text="scale:", width=32, bg=Styles.colours["grey"])
         mpriorsnscale.grid(row=1, column=0, columnspan=1, sticky=E)
         epriorsnscale.grid(row=1, column=1, columnspan=1, sticky=W)
         smallentryframetext(f, 1, 2, self.params["priorsnmin"], 15, "min:")
@@ -209,7 +212,7 @@ class AdvancedSettings():
 
         priorheader.grid(row=6, column=4, sticky=W, columnspan=1)
         Message(self.frame, text="You can set following parameters based on the variables defined in the GP section.",
-                width=400, font=Styles.fonts["entry"]).grid(row=7, column=4, columnspan=2)
+                width=400, font=Styles.fonts["entry"], bg=Styles.colours["grey"]).grid(row=7, column=4, columnspan=2)
         f.grid(row=8, column=4, sticky=E + W, columnspan=2, rowspan=10)
 
     def data(self):
@@ -287,7 +290,7 @@ class ModelFrame():
         ecmd.grid(row=2, column=0, columnspan=3, pady=5, rowspan=2)
         self.isreadyE(ecmd)
         # Seperator
-        Label(self.frame, text="").grid(row=4, column=0, sticky=W, columnspan=2)
+        Label(self.frame, text="", bg=Styles.colours["grey"]).grid(row=4, column=0, sticky=W, columnspan=2)
 
     def modelio(self):
         ioheader = header(self.frame, "Select your model I/O:")
@@ -306,7 +309,7 @@ class ModelFrame():
         eiuri.grid(row=6, column=0, columnspan=2)
         eouri.grid(row=7, column=0, columnspan=2)
         # Seperator
-        Label(self.frame, text="").grid(row=8, column=0, sticky=W, columnspan=2)
+        Label(self.frame, text="", bg=Styles.colours["grey"]).grid(row=8, column=0, sticky=W, columnspan=2)
 
     def bounds(self):
         def boundsfilepicker(event):
@@ -507,10 +510,10 @@ class ModelBayes():
 
     def policy(self):
         policyheader = headersmall(self.frame, text="Policies:")
-        cei = Checkbutton(self.frame, text="Expected Improvement", variable=self.params["policies"][0])
-        cpi = Checkbutton(self.frame, text="Probability Improvement", variable=self.params["policies"][1])
-        cucb = Checkbutton(self.frame, text="Upper Confidence Bound", variable=self.params["policies"][2])
-        ctho = Checkbutton(self.frame, text="Thompson", variable=self.params["policies"][3])
+        cei = Checkbutton(self.frame, text="Expected Improvement", variable=self.params["policies"][0], bg=Styles.colours["grey"])
+        cpi = Checkbutton(self.frame, text="Probability Improvement", variable=self.params["policies"][1], bg=Styles.colours["grey"])
+        cucb = Checkbutton(self.frame, text="Upper Confidence Bound", variable=self.params["policies"][2], bg=Styles.colours["grey"])
+        ctho = Checkbutton(self.frame, text="Thompson", variable=self.params["policies"][3], bg=Styles.colours["grey"])
 
         self.isreadyR(cei)
         self.isreadyR(cpi)
@@ -526,10 +529,10 @@ class ModelBayes():
     def kernels(self):
         kernelsheader = headersmall(self.frame, text="Kernels:")
 
-        cse = Checkbutton(self.frame, text="Squared Exponential", variable=self.params["kernels"][0])
-        cm5 = Checkbutton(self.frame, text="Matern 5", variable=self.params["kernels"][1])
-        cm3 = Checkbutton(self.frame, text="Matern 3", variable=self.params["kernels"][2])
-        cm1 = Checkbutton(self.frame, text="Matern 1", variable=self.params["kernels"][3])
+        cse = Checkbutton(self.frame, text="Squared Exponential", variable=self.params["kernels"][0], bg=Styles.colours["grey"])
+        cm5 = Checkbutton(self.frame, text="Matern 5", variable=self.params["kernels"][1], bg=Styles.colours["grey"])
+        cm3 = Checkbutton(self.frame, text="Matern 3", variable=self.params["kernels"][2], bg=Styles.colours["grey"])
+        cm1 = Checkbutton(self.frame, text="Matern 1", variable=self.params["kernels"][3], bg=Styles.colours["grey"])
 
         self.isreadyR(cse)
         self.isreadyR(cm5)
@@ -554,8 +557,8 @@ class ModelBayes():
     def minormax(self):
         objheader = headersmall(self.frame, text="Objective:")
 
-        rmim = Radiobutton(self.frame, text="Minimize", variable=self.params["objective"], value="min")
-        rmax = Radiobutton(self.frame, text="Maximize", variable=self.params["objective"], value="max")
+        rmim = Radiobutton(self.frame, text="Minimize", variable=self.params["objective"], value="min", bg=Styles.colours["grey"])
+        rmax = Radiobutton(self.frame, text="Maximize", variable=self.params["objective"], value="max", bg=Styles.colours["grey"])
 
         objheader.grid(row=7, column=1, sticky=W, columnspan=2)
         rmim.grid(row=8, column=1, pady=0, sticky=W, padx=10)
@@ -565,7 +568,7 @@ class ModelBayes():
 
     def outputdir(self):
         iframe = Frame(self.frame)
-        iframe.config(padx=5, pady=5)
+        iframe.config(padx=5, pady=5, bg=Styles.colours["grey"])
         iframe.grid(row=10, column=0, sticky=W + E + N + S, columnspan=3, rowspan=2)
         objheader = headersmall(iframe, text="Model Output Directory (Optional):")
         boutfile = yellowbutton(iframe, "Select Directory", 14, click=None)
