@@ -8,7 +8,7 @@ from factories import camobutton,qbutton,yellowbutton
 from selection import AdvancedSettings
 
 class mainheader():
-    def __init__(self, master, console,params):
+    def __init__(self, master, console,params,maingui):
         self.frame = Frame(master)
         self.frame.config(padx=5, pady=5, bg=Styles.colours["darkGrey"])
         self.frame.grid(row=0, column=0, sticky=W + E + N + S,columnspan=2)
@@ -20,8 +20,8 @@ class mainheader():
         def importsettings(event):
             f = tkFileDialog.askopenfilename(parent=master, title='Choose a file')
             parsemodifycustomvar(params,parsein(f,parseintosimple(params),console))
-            console.ready("model")
-            console.ready("bayes")
+            maingui.ready("model")
+            maingui.ready("bayes")
 
         def exportfile(event):
             f = tkFileDialog.asksaveasfilename(parent=master, title='Choose a file')

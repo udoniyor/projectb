@@ -71,7 +71,7 @@ class projectbgui:
         }
 
         self.isready = {"model": False, "bayes": True}
-        self.headerframe = mainheader(self.master, self.console, self.params)
+        self.headerframe = mainheader(self.master, self.console, self.params,self)
         self.currentstage = self.selectionstage()
         self.footerframe = self.concolefooter()
 
