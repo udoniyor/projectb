@@ -43,6 +43,13 @@ class BayesianOptProcess():
         self.outputdir = "" if self.params["outputdir"] == "Output Directory" else self.params["outputdir"]
         self.console = lambda t,v=2: pipeout.send({"console": {"text":t,"verbose":v}})
 
+
+        if str(self.params["dimscheudler"]).lower() == "true":
+            norm = False
+            self.console("Normalization is disabled with Dimension Scheduler",2)
+        else:
+            norm = True if str(self.params["normalize"]).lower() == "true" else False
+      
         # Create an objective function from the parameters
         modelfunc = CGOModel(
             command=params["command"],
@@ -50,7 +57,7 @@ class BayesianOptProcess():
             outputURI=params["modeloutput"],
             bounds=params["bounds"],
             console=self.console,
-            normalize=bool(params["normalize"]),
+            normalize=norm,
             minmax=1 if params["objective"] == "max" else -1
         )
 
@@ -81,6 +88,11 @@ class BayesianOptProcess():
     # Go through all experiments and always check if we need to stop
     # and update the observer on what is happening via the pipes
     def run(self):
+        self.console("Normalization: "+str((self.params["normalize"])),2)
+        self.console("Solver: "+(self.params["solver"]),2)
+        self.console("Objective: "+(self.params["objective"]),2)
+        self.console("Dimension Scheduler: "+str(self.params["dimscheudler"]),2)
+   
         for i, e in enumerate(self.experiments):
             start = time.clock()
             if self.pipeout.poll():
@@ -275,7 +287,7 @@ class BayesianOptProcess():
         objective.set_initial(bX)
         objective.set_best(model.data[1][bY])
         dimensionsProb = [0.1] * len(bounds)
-        self.console("Starting Bayesian Optimization")
+        self.console("Starting Bayesian Optimization with Dimensions Scheduler")
         for i in xrange(model.ndata, niter):
             start = time.clock()
             curiter = i

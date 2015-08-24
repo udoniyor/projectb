@@ -42,6 +42,11 @@ class BayesianOptProcess():
         self.console = console
         self.outputdir = "" if self.params["outputdir"] == "Output Directory" else self.params["outputdir"]
 
+        if (self.params["dimscheudler"]):
+            norm = False
+            console("Normalization is disabled with Dimension Scheduler",2)
+        else:
+            norm = self.params["normalize"]
         # Create an objective function from the parameters
         modelfunc = CGOModel(
             command=params["command"],
@@ -49,7 +54,7 @@ class BayesianOptProcess():
             outputURI=params["modeloutput"],
             bounds=params["bounds"],
             console=self.console,
-            normalize=(params["normalize"]),
+            normalize=norm,
             minmax=1 if params["objective"] == "max" else -1
         )
 
@@ -82,6 +87,7 @@ class BayesianOptProcess():
         self.console("Normalization: "+str((self.params["normalize"])),2)
         self.console("Solver: "+(self.params["solver"]),2)
         self.console("Objective: "+(self.params["objective"]),2)
+        self.console("Dimension Scheduler: "+str(self.params["dimscheudler"]),2)
         for i, e in enumerate(self.experiments):
             self.console("Starting with " + e["policy"][0] + " and " + e["kernel"] + " kernel.", 1)
             if self.params["dimscheudler"]:
@@ -147,8 +153,10 @@ class BayesianOptProcess():
             start = time.clock()
             # get the next point to evaluate.
             index = policy(model)
+
             x, _ = solver(index, bounds)
             glomu, glovar = model.posterior(x, grad=False)[:2]
+
             # make an observation and record it.
             y = objective(x)
             # Send out the data to the observer
@@ -221,7 +229,7 @@ class BayesianOptProcess():
         objective.set_initial(bX)
         objective.set_best(model.data[1][bY])
         dimensionsProb = [0.1] * len(bounds)
-        self.console("Starting Bayesian Optimization", 1)
+        self.console("Starting Bayesian Optimization with Dimensions Scheduler", 1)
         self.console("Time,Objective,Mu,Var,X", 2)
         for i in xrange(model.ndata, niter):
             start = time.clock()

@@ -36,15 +36,14 @@ def parsein(file, params, console=None):
                 if (params.has_key(param)):
                     if param in booleanparams:
                         try:
-                            print(param,":",splitline[1],":",type(splitline[1]))
                             params[param] = True if (str(splitline[1])).lower() == "true" else False
-                            print(param,":",params[param],":",type(params[param]))
+
                         except:
                             if console is not None:
                                 console.log("The " + param + " must be a boolean, please check the file")
                             else:
                                 raise ValueError(("The " + param + " does must be a boolean, please check the file"))
-                    if param == "bounds":
+                    elif param == "bounds":
                         try:
                             if not boundseen:
                                 params["bounds"][:] = []
@@ -145,7 +144,6 @@ def parsein(file, params, console=None):
 
         for line in f:
             add_data(np.fromstring(line, dtype=float, sep=','))
-
     return params
 
 
@@ -162,7 +160,7 @@ def parseintosimple(customvarparms):
         elif key == "bounds":
             return value
         elif key == "normalize" or key == "dimscheudler":
-            return True if value == 1 else False
+            return True if value.get() == 1 else False
         elif key == "data":
             data = [[], []]
             if os.path.isfile(value.get()):
@@ -202,7 +200,7 @@ def parsemodifycustomvar(customvarsparam, simpleparams):
             else:
                 customvarsparam[key] = value
         elif key == "normalize" or key == "dimscheudler":
-            if simpleparams[key] == "True":
+            if simpleparams[key]:
                 customvarsparam[key].set(1)
             else:
                 customvarsparam[key].set(0)
