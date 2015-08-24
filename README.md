@@ -28,7 +28,7 @@ from the main directory.
 
 Tips
 ============
-If you are having trouble installing via pip, try installing scipy and numpy prior the commands. For more details on how to
+If you are having trouble installing via pip, try installing scipy and numpy with package manager on UNIX based systems. For more details on how to
 install SciPy stack on your machine look [here](http://www.scipy.org/install.html)
 
 If you are on Windows and having troubles with pip, try [Anaconda](http://continuum.io/downloads). It includes numpy and scipy, therefore
@@ -64,7 +64,7 @@ The Framework defines a simple CSV (Comma Separated Values) as a file format whi
 
 The file structure follows a simple pattern, each line stores only one parameter. First value is the parameter key, for example “policies”; followed by the value of the parameter, separated by a comma such as “ei” (expected improvement policy). The structure allows having multiple values for each parameter, but this is limited only to the kernel and policy parameters. The limitation is imposed by the graphical user interface, where only multiple kernel and policies can be selected.
 
-Another exception is the bounds parameter. The bounds can be described by stating the key "bounds", followed by a comma, lower bound, comma and upper bound. THe key can be defined multiple times to specify many bounds. For example if function has three inputs with bounds between 0 and 100, it should be specified as follows:
+Another exception is the bounds parameter. The bounds can be described by stating the key "bounds", followed by a comma, lower bound, comma and upper bound. The key can be defined multiple times to specify many bounds. For example if function has three inputs with bounds between 0 and 100, it should be specified as follows:
 
 		...
 		bounds,0,100
