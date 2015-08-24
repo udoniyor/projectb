@@ -1,5 +1,7 @@
-__author__ = 'doniy'
-from Tkinter import NORMAL, END, DISABLED
+try:
+    from Tkinter import NORMAL, END, DISABLED
+except:
+    from tkinter import NORMAL, END, DISABLED
 
 
 # A simple console class with verbosity level to filter out messages

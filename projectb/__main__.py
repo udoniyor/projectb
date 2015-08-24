@@ -9,7 +9,7 @@ from consoles import console
 # Main class to invoke GUI or CLI
 def main(argv):
     parser = argparse.ArgumentParser("ProjectB is a Bayesian Optimization GUI with commandline support.")
-    parser.add_argument("-v", "--verbosity", type=int, choices=[0, 1, 2], default=0,
+    parser.add_argument("-v", "--verbosity", action="count",
                         help="increase output verbosity, 1 will inform of only about experiment start and finish. 2 will inform of each iteration")
     parser.add_argument("-cli", help="execute the Bayesian Optimization without the GUI",
                         action="store_true")
@@ -37,7 +37,7 @@ def main(argv):
             print "verbosity turned 1"
         elif args.verbosity >= 2:
             print "verbosity turned 2"
-        console(verbosity=args.verbosity)
+        c = console(verbosity=args.verbosity)
         try:
             import nlopt
             solver = "direct"
@@ -84,8 +84,8 @@ def main(argv):
             "thompsonrng": 0
         }
         # Start Bayes Opt
-        bayesianthreadcli.BayesianOptProcess(fileparser.parsein(args.paramfile, defaultparams, console),
-                                             console=console)
+        bayesianthreadcli.BayesianOptProcess(fileparser.parsein(args.paramfile, defaultparams, c),
+                                             console=c)
     else:
         # Check if the Graphical libraries are present
         try:

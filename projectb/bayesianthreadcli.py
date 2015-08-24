@@ -67,7 +67,7 @@ class BayesianOptProcess():
                     "objective": modelfunc,
                     "bounds": np.array(params["bounds"]),
                     "niter": int(float(params["iter"])),
-                    "init": params["init"],
+                    "init": params["initializer"],
                     "policy": policyshortcut[p],
                     "kernel": k,
                     "solver": params["solver"],
