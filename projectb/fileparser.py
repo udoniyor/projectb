@@ -204,7 +204,6 @@ def parsemodifycustomvar(customvarsparam, simpleparams):
                 customvarsparam[key].set(1)
             else:
                 customvarsparam[key].set(0)
-
         else:
             customvarsparam[key].set(simpleparams[key])
 
@@ -222,7 +221,7 @@ def parseout(file, param, console=None):
         "initializernum": 30,
         "recommender": "latent",
         "normalize": False,
-        "data": "Select Data File",
+        "data": [[],[]],
         "dims": 2.,
         "dimscheudler": False,
         "gpsf": "np.std(Y)",
@@ -247,6 +246,7 @@ def parseout(file, param, console=None):
         "thompsonn": 100,
         "thompsonrng": 0
     }
+    data = False
 
     with open(file, "w") as f:
         for (p, v) in param.items():
@@ -265,6 +265,8 @@ def parseout(file, param, console=None):
                     pass
             if p == "outputdir":
                 continue
+            elif p == "data":
+            	data = True if v != [[],[]] else False
             elif p == "bounds":
                 if v is not None:
                     for b in v:
@@ -279,6 +281,9 @@ def parseout(file, param, console=None):
                     f.write(str(p) + "," + str(v) + "\n")
             else:
                 f.write(str(p) + "," + ",".join(v) + "\n")
+    if data:
+    	for i,d in enumerate(data[0]):
+    		f.write("0," + str(data[1][i]) + ",0,0," + ",".join([str(a) for a in d]) + "\n")
 
     if console is not None:
         console.log("Succesfully exported settingts to >" + str(file))
