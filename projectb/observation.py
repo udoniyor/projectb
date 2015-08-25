@@ -124,7 +124,7 @@ class observation():
                                  "Graph: Running Best (Overview)", "Graph: Variance", "Graph: Variance (Last 25)",
                                  "Graph: Objective Value (Last 25)", "Graph: Running Best (Last 25)",
                                  "Graph: Time (seconds)")
-        self.option.config(padx=5, pady=5, justify=LEFT, font=Styles.fonts["h1"], relief=FLAT,
+        self.option.config(padx=5, pady=5,state=DISABLED, justify=LEFT, font=Styles.fonts["h1"], relief=FLAT,
                            highlightbackground=Styles.colours["yellow"], highlightthickness=1,
                            bg=Styles.colours["grey"])
         self.option.pack(fill=BOTH)
