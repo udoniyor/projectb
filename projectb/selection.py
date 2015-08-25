@@ -572,7 +572,7 @@ class ModelBayes():
         iframe.grid(row=10, column=0, sticky=W + E + N + S, columnspan=3, rowspan=2)
         objheader = headersmall(iframe, text="Model Output Directory (Optional):")
         boutfile = yellowbutton(iframe, "Select Directory", 14, click=None)
-        eoutfiledir = entry(iframe, self.params["outputdir"], 32, file=True, fileCheck=False, button=boutfile)
+        eoutfiledir = entry(iframe, self.params["outputdir"], 32, fileCheck=False, dir=True, button=boutfile)
         objheader.grid(row=0, column=0, sticky=W, columnspan=2)
         boutfile.grid(row=1, column=2, pady=5)
         eoutfiledir.grid(row=1, column=0, columnspan=2)

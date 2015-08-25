@@ -104,7 +104,9 @@ def redbutton(b,t):
     b.bind("<Leave>", dbuttonout)
     b.bind("<FocusOut>", dbuttonout)
 
-def entry(f, s, width, file=False, fileCheck=False, button=None):
+
+
+def entry(f, s, width, file=False, fileCheck=False,dir=False, button=None):
     defaulttext = s.get()
 
     def openFileDialog(event):
@@ -113,6 +115,18 @@ def entry(f, s, width, file=False, fileCheck=False, button=None):
             checkFile()
         else:
             s.set(tkFileDialog.asksaveasfilename(parent=f, title='Create file to save data to'))
+        button.bind("<Enter>", lambda event: "break")
+        button.bind("<FocusIn>", lambda event: "break")
+        button.bind("<Leave>", lambda event: "break")
+        button.bind("<FocusOut>", lambda event: "break")
+        button.flash()
+
+    def openDirDialog(event):
+        s.set(tkFileDialog.askdirectory(title='Choose the output directory', mustexist=True))
+        if len(s.get()) > 0:
+            e.config(font=Styles.fonts["entryFilled"], bg=Styles.colours["lightGreen"])
+        else:
+            s.set(defaulttext)
         button.bind("<Enter>", lambda event: "break")
         button.bind("<FocusIn>", lambda event: "break")
         button.bind("<Leave>", lambda event: "break")
@@ -143,7 +157,10 @@ def entry(f, s, width, file=False, fileCheck=False, button=None):
     e.bind("<FocusOut>", restoreEntry)
     e.bind("<Button-1>", clearEntry)
     if button is not None:
-        button.bind("<Button-1>", openFileDialog)
+        if file:
+            button.bind("<Button-1>", openFileDialog)
+        if dir:
+            button.bind("<Button-1>", openDirDialog)
 
     return e
 
