@@ -5,7 +5,7 @@ except:
     from tkinter import Tk, FALSE, Frame, BOTH, END, DISABLED, Message, LEFT, RIGHT, NORMAL, CENTER, Text, Scrollbar, \
         FLAT, N, S, E, W
 
-from multiprocessing import Process, Pipe, freeze_support
+from multiprocessing import Process, Pipe
 import threading
 
 from projectb.selection import ModelFrame, ModelBayes
@@ -186,8 +186,7 @@ class guiconnector():
 
     # Starts up data structures
     def start(self, params):
-        self.a, self.b = Pipe(duplex=True)
-        freeze_support()
+        self.a, self.b = Pipe(duplex=True)        
         if __name__ == "projectb.maingui":
             self.p = Process(target=BayesianOptProcess, kwargs={
                 "params": parseintosimple(params),

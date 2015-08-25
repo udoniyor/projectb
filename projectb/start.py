@@ -4,6 +4,7 @@ from projectb.maingui import projectbgui
 from projectb.fileparser import *
 from projectb.bayesianthreadcli import BayesianOptProcess 
 from projectb.consoles import console
+from multiprocessing import freeze_support
 
 
 # Main class to invoke GUI or CLI
@@ -105,4 +106,5 @@ def main(argv):
 
 
 if __name__ == "__main__":
+    freeze_support()
     main(sys.argv[1:])
