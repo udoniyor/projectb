@@ -32,11 +32,11 @@ def main(argv):
     if args.cli:
         if args.paramfile is None:
             parser.error("Specify the parameter file when command line interface is used")
-        if args.verbosity >= 0:
+        if args.verbosity == 0:
             print "verbosity turned 0"
-        elif args.verbosity >= 1:
+        elif args.verbosity == 1:
             print "verbosity turned 1"
-        elif args.verbosity >= 2:
+        elif args.verbosity == 2:
             print "verbosity turned 2"
         c = console(verbosity=args.verbosity)
         try:

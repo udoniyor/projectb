@@ -90,12 +90,15 @@ class BayesianOptProcess():
         self.console("Dimension Scheduler: "+str(self.params["dimscheudler"]),2)
         for i, e in enumerate(self.experiments):
             self.console("Starting with " + e["policy"][0] + " and " + e["kernel"] + " kernel.", 1)
-            if self.params["dimscheudler"]:
-                e.update({"dims": int(self.params["dims"])})
-                self.solve_bayesopt_dim(**e)
-            else:
-                self.solve_bayesopt(**e)
-            self.console("Finished with " + e["policy"][0] + " and " + e["kernel"] + " kernel.", 1)
+            try:
+                if self.params["dimscheudler"]:
+                    e.update({"dims": int(self.params["dims"])})
+                    self.solve_bayesopt_dim(**e)
+                else:
+                    self.solve_bayesopt(**e)
+                self.console("Finished with " + e["policy"][0] + " and " + e["kernel"] + " kernel.", 1)
+            except:
+                self.console("An error occured during Bayesian Optimization Experiment, please check your settings")
         self.console("Ended Bayesian Optimization",1)
 
     # The Bayesian Optimization Solver
@@ -251,10 +254,13 @@ class BayesianOptProcess():
             boundslowerdim = objective.get_bounds()
             # check if the model exists, else create a new one
             if not modelsDict.has_key(str(d)):
-                tX = self.getInputsDimRed(model, d)
-                tY = model.data[1]
+                tX ,tY= self.getInputsDimRed(model, d)
                 m = self.createNewModel(tX, tY, boundslowerdim, kernel)
-                m.add_data(tX, tY)
+                try:
+                    m.add_data(tX, tY)
+                except:
+                    self.console("An error occured during modle creation during inputing data points into the GP. Try increasing GP:sn parameter ")
+                    break
                 modelsDict[str(d)] = m
                 dimDict[str(d)] = d
             # get model for current dimensions
@@ -299,7 +305,9 @@ class BayesianOptProcess():
         stackedData = np.array(data[:, dimensions[0]])
         for d in xrange(1, len(dimensions)):
             stackedData = np.column_stack((stackedData, data[:, dimensions[d]]))
-        return stackedData
+        b = np.ascontiguousarray(stackedData).view(np.dtype((np.void, stackedData.dtype.itemsize * stackedData.shape[1])))
+        _, indices = np.unique(b, return_index=True)
+        return stackedData[indices], model.data[1][indices]
 
     # Creates a model from given parameters
     # The variables are set from the user specified commands
