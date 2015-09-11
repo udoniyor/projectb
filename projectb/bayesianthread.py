@@ -49,7 +49,7 @@ class BayesianOptProcess():
             self.console("Normalization is disabled with Dimension Scheduler",2)
         else:
             norm = True if str(self.params["normalize"]).lower() == "true" else False
-      
+
         # Create an objective function from the parameters
         modelfunc = CGOModel(
             command=params["command"],
@@ -92,7 +92,7 @@ class BayesianOptProcess():
         self.console("Solver: "+(self.params["solver"]),2)
         self.console("Objective: "+(self.params["objective"]),2)
         self.console("Dimension Scheduler: "+str(self.params["dimscheudler"]),2)
-   
+
         for i, e in enumerate(self.experiments):
             start = time.clock()
             if self.pipeout.poll():
@@ -215,14 +215,19 @@ class BayesianOptProcess():
             x, _ = solver(index, bounds)
             glomu, glovar = model.posterior(x, grad=False)[:2]
             # make an observation and record it.
-            y = objective(x)
-            model.add_data(x, y)
+            try:
+                y = objective(x)
+                model.add_data(x, y)
+                yp = str(y)
+            except:
+                yp = "Failed"
             # Send out the data to the observer and write to the file
             interval = time.clock() - start
             with open(filename, "a+") as f:
-                f.write(str(interval) + "," + str(y) + "," + str(glomu[0]) + "," + str(glovar[0]) + ",".join(
+                f.write(str(interval) + "," + yp + "," + str(glomu[0]) + "," + str(glovar[0]) + ",".join(
                     [str(a) for a in x]) + "\n")
-            self.pipeout.send({"data": {"y": y, "x": x, "mu": glomu[0], "var": glovar[0], "time": interval}})
+            if yp != "Failed":
+                self.pipeout.send({"data": {"y": y, "x": x, "mu": glomu[0], "var": glovar[0], "time": interval}})
         # Get the recommender point from the model
         recx = recommender(model, bounds)
         recmu, recvar = model.posterior(recx, grad=False)[:2]
@@ -289,7 +294,7 @@ class BayesianOptProcess():
         bX = model.data[0][bY]
         objective.set_initial(bX)
         objective.set_best(model.data[1][bY])
-        dimensionsProb = [0.1] * len(bounds)
+        dimensionsProb = [1.0/len(bounds)] * len(bounds)
         self.console("Starting Bayesian Optimization with Dimensions Scheduler")
         for i in xrange(model.ndata, niter):
             start = time.clock()
@@ -334,26 +339,34 @@ class BayesianOptProcess():
 
             x, _ = solver(index, boundslowerdim)
 
-            # make an observation and record it.
-            y = objective(x)
-            curX = objective.get_prev_input()
+                        # make an observation and record it.
+            try:
+                y = objective(x)
+                yp = str(y)
+                curX = objective.get_prev_input()
+                model.add_data(curX, y)
+                modellowerdim.add_data(x, y)
+
+                if objective.get_best() is not None:
+                    if (y > objective.get_best()):
+                        objective.set_best(y)
+                        objective.change_initial(x)
+                    else:
+                        objective.set_best(y)
+                        objective.change_initial(x)
+            except:
+                curX = objective.get_prev_input()
+                yp = "Failed"
+
             glomu, glovar = model.posterior(curX, grad=False)[:2]
             # Send out the data to the observer
 
-            model.add_data(curX, y)
-            modellowerdim.add_data(x, y)
             interval = time.clock() - start
             with open(filename, "a+") as f:
-                f.write(str(interval) + "," + str(y) + "," + str(glomu[0]) + "," + str(glovar[0]) + ",".join(
+                f.write(str(interval) + "," + yp + "," + str(glomu[0]) + "," + str(glovar[0]) + ",".join(
                     [str(a) for a in curX]) + "\n")
-            self.pipeout.send({"data": {"y": y, "x": curX, "mu": glomu[0], "var": glovar[0], "time": interval}})
-            if objective.get_best() is not None:
-                if (y > objective.get_best()):
-                    objective.set_best(y)
-                    objective.change_initial(x)
-            else:
-                objective.set_best(y)
-                objective.change_initial(x)
+            if yp != "Failed":
+                self.pipeout.send({"data": {"y": y, "x": curX, "mu": glomu[0], "var": glovar[0], "time": interval}})
         # Get the recommender point from the model
         recx = recommender(model, bounds)
         recmu, recvar = model.posterior(recx, grad=False)[:2]
