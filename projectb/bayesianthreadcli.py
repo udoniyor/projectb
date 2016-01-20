@@ -167,7 +167,7 @@ class BayesianOptProcess():
                 yp = str(y)
             except:
                 yp = "Failed"
-            #Write to the file            	
+            #Write to the file
             interval = time.clock() - start
             data = str(interval) + "," + yp + "," + str(glomu[0]) + "," + str(glovar[0]) + ",".join(
                 [str(a) for a in x])
@@ -287,9 +287,9 @@ class BayesianOptProcess():
                     if (y > objective.get_best()):
                         objective.set_best(y)
                         objective.change_initial(x)
-                    else:
-                        objective.set_best(y)
-                        objective.change_initial(x)
+                else:
+                    objective.set_best(y)
+                    objective.change_initial(x)
             except:
                 curX = objective.get_prev_input()
                 yp = "Failed"

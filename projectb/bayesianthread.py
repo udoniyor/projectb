@@ -351,9 +351,9 @@ class BayesianOptProcess():
                     if (y > objective.get_best()):
                         objective.set_best(y)
                         objective.change_initial(x)
-                    else:
-                        objective.set_best(y)
-                        objective.change_initial(x)
+                else:
+                    objective.set_best(y)
+                    objective.change_initial(x)
             except:
                 curX = objective.get_prev_input()
                 yp = "Failed"
